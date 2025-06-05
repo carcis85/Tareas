@@ -1,8 +1,10 @@
-export enum Estado{
+
+
+export enum Estado {
   ACTIVO = 'ACTIVO',
-  EN_ESPERA = 'PENDIENTE',
+  PENDIENTE = 'PENDIENTE',
   BLOQUEADO = 'BLOQUEADO',
-  CERRADO = 'COMPLETADO'
+  COMPLETADO = 'COMPLETADO'
 }
 
 
@@ -14,3 +16,5 @@ export interface Tarea{
   estado: Estado;
   descripcion?: string;
 }
+
+

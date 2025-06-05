@@ -1,10 +1,7 @@
-
-<!-- <div class="flex flex-wrap gap-4 justify-center mt-10">
-  <app-tarea *ngFor="let tarea of tareas"[tarea]="tarea"></app-tarea>
-</div>
- -->
+<h2 class="text-2xl font-bold mb-4">Lista de Tareas</h2>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
-  <app-tarea *ngFor="let tarea of tareas"[tarea]="tarea">
-  </app-tarea>
+  <app-tarea *ngFor="let tarea of tareas" [tarea]="tarea"></app-tarea>
 </div>
+
+
