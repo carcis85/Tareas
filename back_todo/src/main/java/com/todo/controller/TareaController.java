@@ -30,6 +30,7 @@ public class TareaController {
 
     @PostMapping
     public Tarea newTarea(@RequestBody Tarea tarea){
+         tarea.setId(null); 
         return tareaService.newTarea(
                 tarea.getTitulo(),
                 tarea.getFecha(),

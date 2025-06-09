@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { Tarea } from '../../models/tarea.model';
+import { Tarea, Estado } from '../../models/tarea.model';
 import { TareasService } from '../../services/tareas.service';
 
 @Component({
@@ -12,6 +12,16 @@ import { TareasService } from '../../services/tareas.service';
 export class TareasListComponent implements OnInit {
   tareas: Tarea[] = [];
 
+  // Declaración única y válida
+  nuevaTarea: Partial<Tarea> = {
+    titulo: '',
+    descripcion: '',
+    estado: Estado.ACTIVO,
+    fecha: new Date().toISOString().split('T')[0]
+  };
+
+  mostrarModal: boolean = false;
+
   constructor(private tareasService: TareasService) {}
 
   ngOnInit(): void {
@@ -22,6 +32,41 @@ export class TareasListComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al cargar tareas:', err);
+      }
+    });
+  }
+
+  abrirModal() {
+    this.nuevaTarea = {
+      titulo: '',
+      descripcion: '',
+      estado: Estado.ACTIVO,
+      fecha: new Date().toISOString().split('T')[0]
+    };
+    this.mostrarModal = true;
+  }
+
+  cerrarModal() {
+    this.mostrarModal = false;
+  }
+
+  crearTarea() {
+    console.log('Tarea a crear:', this.nuevaTarea);
+
+    // this.tareasService.crearTarea(this.nuevaTarea).subscribe({
+    this.tareasService.crearTarea(this.nuevaTarea as Omit<Tarea, 'id'>).subscribe({
+      next: (tarea) => {
+        this.tareas.push(tarea);
+        this.nuevaTarea = {
+          titulo: '',
+          descripcion: '',
+          estado: Estado.ACTIVO,
+          fecha: new Date().toISOString().split('T')[0]
+        };
+        this.cerrarModal();
+      },
+      error: (err) => {
+        console.error('Error al crear tarea', err);
       }
     });
   }

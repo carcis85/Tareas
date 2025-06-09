@@ -10,7 +10,7 @@ export enum Estado {
 
 
 export interface Tarea{
-  id: number;
+  id?: number;
   titulo: string;
   fecha: string;
   estado: Estado;
