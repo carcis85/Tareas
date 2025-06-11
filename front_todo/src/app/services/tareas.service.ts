@@ -24,5 +24,9 @@ export class TareasService {
     return this.http.post<Tarea>(this.apiUrl, tarea);
   }
 
+  eliminarTarea(id: number): Observable<void> {
+  return this.http.delete<void>(`${this.apiUrl}/${id}`);
+}
+
 
 }

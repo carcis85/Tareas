@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Estado, Tarea } from '../../models/tarea.model';
 
 @Component({
@@ -9,6 +9,7 @@ import { Estado, Tarea } from '../../models/tarea.model';
 export class TareaComponent {
 
   @Input() tarea!: Tarea;
+  @Output() eliminar = new EventEmitter<Tarea>();
 
   getEstadoColor(estado: Estado): string {
     switch (estado) {
@@ -23,6 +24,10 @@ export class TareaComponent {
       default:
         return 'bg-gray-500';
     }
+  }
+
+  confirmarEliminacion() {
+    this.eliminar.emit(this.tarea);
   }
 
 }

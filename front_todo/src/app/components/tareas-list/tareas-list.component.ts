@@ -70,4 +70,33 @@ export class TareasListComponent implements OnInit {
       }
     });
   }
+
+  tareaAEliminar: Tarea | null = null;
+mostrarModalEliminar = false;
+
+abrirModalEliminar(tarea: Tarea) {
+  this.tareaAEliminar = tarea;
+  this.mostrarModalEliminar = true;
+}
+
+cerrarModalEliminar() {
+  this.mostrarModalEliminar = false;
+  this.tareaAEliminar = null;
+}
+
+confirmarEliminarTarea() {
+  if (!this.tareaAEliminar) return;
+
+  this.tareasService.eliminarTarea(this.tareaAEliminar.id).subscribe({
+    next: () => {
+      this.tareas = this.tareas.filter(t => t.id !== this.tareaAEliminar!.id);
+      this.cerrarModalEliminar();
+    },
+    error: err => {
+      console.error('Error al eliminar tarea:', err);
+      this.cerrarModalEliminar();
+    }
+  });
+}
+
 }
