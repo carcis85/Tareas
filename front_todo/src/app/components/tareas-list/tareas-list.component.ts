@@ -22,7 +22,9 @@ export class TareasListComponent implements OnInit {
 
   mostrarModal: boolean = false;
 
-  constructor(private tareasService: TareasService) {}
+  tareaAEliminar: Tarea | null = null;
+
+  constructor(private tareasService: TareasService) { }
 
   ngOnInit(): void {
     this.tareasService.getTareas().subscribe({
@@ -71,32 +73,32 @@ export class TareasListComponent implements OnInit {
     });
   }
 
-  tareaAEliminar: Tarea | null = null;
-mostrarModalEliminar = false;
 
-abrirModalEliminar(tarea: Tarea) {
-  this.tareaAEliminar = tarea;
-  this.mostrarModalEliminar = true;
-}
+  mostrarModalEliminar = false;
 
-cerrarModalEliminar() {
-  this.mostrarModalEliminar = false;
-  this.tareaAEliminar = null;
-}
+  abrirModalEliminar(tarea: Tarea) {
+    this.tareaAEliminar = tarea;
+    this.mostrarModalEliminar = true;
+  }
 
-confirmarEliminarTarea() {
-  if (!this.tareaAEliminar) return;
+  cerrarModalEliminar() {
+    this.mostrarModalEliminar = false;
+    this.tareaAEliminar = null;
+  }
 
-  this.tareasService.eliminarTarea(this.tareaAEliminar.id).subscribe({
-    next: () => {
-      this.tareas = this.tareas.filter(t => t.id !== this.tareaAEliminar!.id);
-      this.cerrarModalEliminar();
-    },
-    error: err => {
-      console.error('Error al eliminar tarea:', err);
-      this.cerrarModalEliminar();
-    }
-  });
-}
+  confirmarEliminarTarea() {
+    if (!this.tareaAEliminar) return;
+
+    this.tareasService.eliminarTarea(this.tareaAEliminar.id!).subscribe({
+      next: () => {
+        this.tareas = this.tareas.filter(t => t.id !== this.tareaAEliminar!.id);
+        this.cerrarModalEliminar();
+      },
+      error: err => {
+        console.error('Error al eliminar tarea:', err);
+        this.cerrarModalEliminar();
+      }
+    });
+  }
 
 }
