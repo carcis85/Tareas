@@ -16,7 +16,7 @@ export class TareasService {
 
   constructor(private http: HttpClient) { }
 
-  getTareas(): Observable<Tarea[]>{
+  getTareas(): Observable<Tarea[]> {
     return this.http.get<Tarea[]>(this.apiUrl);
   }
 
@@ -24,9 +24,10 @@ export class TareasService {
     return this.http.post<Tarea>(this.apiUrl, tarea);
   }
 
-  eliminarTarea(id: number): Observable<void> {
-  return this.http.delete<void>(`${this.apiUrl}/${id}`);
-}
+  eliminarTarea(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
+  }
+
 
 
 }

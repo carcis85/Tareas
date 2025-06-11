@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 // @CrossOrigin(origins = "http://localhost:4200")
@@ -49,14 +51,18 @@ public class TareaController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTarea(@PathVariable Long id){
-        try {
-         tareaService.deleteTarea(id);
-         return ResponseEntity.ok("Tarea borrada");
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tarea no encontrada");
-        }
+public ResponseEntity<Void> deleteTarea(@PathVariable Long id) {
+    try {
+        tareaService.deleteTarea(id);
+        return ResponseEntity.noContent().build(); // 204 No Content, sin cuerpo
+    } catch (RuntimeException e) {
+        return ResponseEntity.notFound().build();
     }
+}
+
+
+
+
 
 
 

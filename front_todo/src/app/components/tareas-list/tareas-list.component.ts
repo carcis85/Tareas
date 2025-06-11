@@ -77,6 +77,7 @@ export class TareasListComponent implements OnInit {
   mostrarModalEliminar = false;
 
   abrirModalEliminar(tarea: Tarea) {
+    console.log('Tarea a eliminar:', tarea);
     this.tareaAEliminar = tarea;
     this.mostrarModalEliminar = true;
   }
@@ -87,6 +88,7 @@ export class TareasListComponent implements OnInit {
   }
 
   confirmarEliminarTarea() {
+    console.log('Confirmando eliminación de:', this.tareaAEliminar);
     if (!this.tareaAEliminar) return;
 
     this.tareasService.eliminarTarea(this.tareaAEliminar.id!).subscribe({
