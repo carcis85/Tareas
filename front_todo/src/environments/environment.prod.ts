@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://tareas-jgr2.onrender.com'
+  apiUrl: 'http://82.165.10.186:8080'
 };

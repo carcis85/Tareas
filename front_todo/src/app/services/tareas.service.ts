@@ -10,8 +10,8 @@ import { environment } from '../../environments/environment';
 })
 export class TareasService {
 
-  // private apiUrl = 'http://localhost:8080/tareas';
-  private apiUrl = `${environment.apiUrl}/tareas`;
+  private apiUrl = 'http://localhost:8080/tareas';
+  //private apiUrl = `${environment.apiUrl}/tareas`;
 
 
   constructor(private http: HttpClient) { }
