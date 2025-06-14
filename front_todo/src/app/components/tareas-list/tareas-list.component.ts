@@ -53,25 +53,40 @@ export class TareasListComponent implements OnInit {
   }
 
   crearTarea() {
-    console.log('Tarea a crear:', this.nuevaTarea);
+  // Creamos un objeto temporal con un ID falso negativo
+  const tempId = Date.now() * -1;
+  const tareaTemp: Tarea = {
+    ...(this.nuevaTarea as Tarea),
+    id: tempId
+  };
 
-    // this.tareasService.crearTarea(this.nuevaTarea).subscribe({
-    this.tareasService.crearTarea(this.nuevaTarea as Omit<Tarea, 'id'>).subscribe({
-      next: (tarea) => {
-        this.tareas.push(tarea);
-        this.nuevaTarea = {
-          titulo: '',
-          descripcion: '',
-          estado: Estado.ACTIVO,
-          fecha: new Date().toISOString().split('T')[0]
-        };
-        this.cerrarModal();
-      },
-      error: (err) => {
-        console.error('Error al crear tarea', err);
-      }
-    });
-  }
+  // Añadimos la tarea al array local inmediatamente
+  this.tareas.unshift(tareaTemp);
+
+  this.mostrarModal = false;
+
+  this.tareasService.crearTarea(this.nuevaTarea as Omit<Tarea, 'id'>).subscribe({
+    next: (tarea) => {
+      // Reemplazamos la tarea temporal por la real (con ID real del backend)
+      const index = this.tareas.findIndex(t => t.id === tempId);
+      if (index !== -1) this.tareas[index] = tarea;
+    },
+    error: (err) => {
+      console.error('Error al crear tarea:', err);
+      // Eliminamos la tarea temporal si falló
+      this.tareas = this.tareas.filter(t => t.id !== tempId);
+      alert("Error al crear tarea");
+    }
+  });
+
+  // Reset del formulario
+  this.nuevaTarea = {
+    titulo: '',
+    descripcion: '',
+    estado: Estado.ACTIVO,
+    fecha: new Date().toISOString().split('T')[0]
+  };
+}
 
 
   mostrarModalEliminar = false;
@@ -88,19 +103,26 @@ export class TareasListComponent implements OnInit {
   }
 
   confirmarEliminarTarea() {
-    console.log('Confirmando eliminación de:', this.tareaAEliminar);
-    if (!this.tareaAEliminar) return;
+  if (!this.tareaAEliminar) return;
 
-    this.tareasService.eliminarTarea(this.tareaAEliminar.id!).subscribe({
-      next: () => {
-        this.tareas = this.tareas.filter(t => t.id !== this.tareaAEliminar!.id);
-        this.cerrarModalEliminar();
-      },
-      error: err => {
-        console.error('Error al eliminar tarea:', err);
-        this.cerrarModalEliminar();
-      }
-    });
-  }
+  const id = this.tareaAEliminar.id!;
+  const tareaBackup = this.tareaAEliminar;
+
+  // Quitamos la tarea de la lista inmediatamente
+  this.tareas = this.tareas.filter(t => t.id !== id);
+  this.cerrarModalEliminar();
+
+  this.tareasService.eliminarTarea(id).subscribe({
+    next: () => {
+      console.log('Tarea eliminada');
+    },
+    error: (err) => {
+      console.error('Error al eliminar tarea:', err);
+      // Restauramos la tarea si falla
+      this.tareas.unshift(tareaBackup);
+      alert("No se pudo eliminar la tarea");
+    }
+  });
+}
 
 }
