@@ -11,6 +11,7 @@ import { TareasService } from '../../services/tareas.service';
 
 export class TareasListComponent implements OnInit {
   tareas: Tarea[] = [];
+  cargando = false;
 
   // Declaración única y válida
   nuevaTarea: Partial<Tarea> = {
@@ -27,6 +28,7 @@ export class TareasListComponent implements OnInit {
   constructor(private tareasService: TareasService) { }
 
   ngOnInit(): void {
+    this.cargando = true;
     this.tareasService.getTareas().subscribe({
       next: (datos) => {
         this.tareas = datos;
